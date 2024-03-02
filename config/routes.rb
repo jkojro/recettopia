@@ -6,4 +6,6 @@ Rails.application.routes.draw do
       get 'recipes/search', to: 'recipes#search', as: 'recipes_search'
     end
   end
+
+  get "*path", to: "fallback#index", constraints: ->(req) { !req.xhr? && req.format.html? }
 end
