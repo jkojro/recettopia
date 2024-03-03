@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_02_214222) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_03_161626) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "ingredients", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_ingredients_on_name"
@@ -26,18 +26,25 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_02_214222) do
     t.bigint "ingredient_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name", null: false
     t.index ["ingredient_id"], name: "index_recipe_ingredients_on_ingredient_id"
     t.index ["recipe_id", "ingredient_id"], name: "index_recipe_ingredients_on_recipe_id_and_ingredient_id", unique: true
     t.index ["recipe_id"], name: "index_recipe_ingredients_on_recipe_id"
   end
 
   create_table "recipes", force: :cascade do |t|
-    t.string "title"
-    t.text "instructions"
-    t.boolean "vegan"
-    t.boolean "gluten_free"
+    t.string "title", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "cook_time"
+    t.integer "prep_time"
+    t.float "ratings"
+    t.string "cuisine"
+    t.string "category"
+    t.string "author"
+    t.string "image"
+    t.index ["cook_time"], name: "index_recipes_on_cook_time"
+    t.index ["ratings"], name: "index_recipes_on_ratings"
   end
 
   add_foreign_key "recipe_ingredients", "ingredients"
