@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 
-function IngredientsForm() {
+function IngredientsForm({ setRecipes }) {
   const [ingredients, setIngredients] = useState(['']);
-  const [recipes, setRecipes] = useState([]);
+  const [cookTime, setCookTime] = useState('');
 
   const handleIngredientChange = (index, event) => {
     const newIngredients = [...ingredients];
     newIngredients[index] = event.target.value;
     setIngredients(newIngredients);
+  };
+
+  const handleCookTimeChange = (event) => {
+    const value = event.target.value;
+    setCookTime(value);
   };
 
   const addIngredientField = () => {
@@ -17,10 +22,19 @@ function IngredientsForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (!Number.isInteger(Number(cookTime)) || cookTime < 0) {
+      alert("Cook time must be a positive integer.");
+      return;
+    }
+
     let queryParams = ingredients
       .filter(ingredient => ingredient.trim() !== '')
       .map(ingredient => `ingredients[]=${encodeURIComponent(ingredient)}`)
       .join('&');
+
+    if (cookTime) {
+      queryParams += `&cook_time=${encodeURIComponent(cookTime)}`;
+    }
 
     const apiUrl = `api/v1/recipes/search?${queryParams}`;
 
@@ -38,44 +52,42 @@ function IngredientsForm() {
 
       const data = await response.json();
       setRecipes(data);
+
+      setIngredients(['']);
+      setCookTime('');
     } catch (error) {
       console.error('Request failed:', error);
     }
   };
-
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <h2>Add Ingredients</h2>
-        {ingredients.map((ingredient, index) => (
-          <div key={index}>
-            <label>
-              Ingredient {index + 1}
-              <input
-                type="text"
-                value={ingredient}
-                onChange={(event) => handleIngredientChange(index, event)}
-              />
-            </label>
-          </div>
-        ))}
-        <button type="button" onClick={addIngredientField}>
-          Add Another Ingredient
-        </button>
-        <button type="submit">Submit</button>
-      </form>
+    <form onSubmit={handleSubmit}>
+      <h2>Add Ingredients</h2>
+      {ingredients.map((ingredient, index) => (
+        <div key={index}>
+          <label>
+            Ingredient {index + 1}
+            <input
+              type="text"
+              value={ingredient}
+              onChange={(event) => handleIngredientChange(index, event)}
+            />
+          </label>
+        </div>
+      ))}
+      <button type="button" onClick={addIngredientField}>Add Another Ingredient</button>
       <div>
-        <h2>Recipes</h2>
-        {recipes.map((recipe) => (
-          <div key={recipe.id}>
-            <h3>Name: {recipe.title}</h3>
-            <p>Vegan: {recipe.vegan ? 'Yes' : 'No'}</p>
-            <p>Gluten Free: {recipe.gluten_free ? 'Yes' : 'No'}</p>
-            <p>Instructions: {recipe.instructions}</p>
-          </div>
-        ))}
+        <label>
+          I don't want to cook more than (minutes):
+          <input
+            type="number"
+            value={cookTime}
+            onChange={handleCookTimeChange}
+            min="0"
+          />
+        </label>
       </div>
-    </div>
+      <button type="submit">Submit</button>
+    </form>
   );
 }
 
