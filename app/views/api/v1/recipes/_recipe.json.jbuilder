@@ -1,1 +1,1 @@
-json.extract! recipe, :id, :title, :vegan, :gluten_free, :instructions
+json.extract! recipe, :id, :title, :cook_time, :prep_time, :ratings, :category, :author, :image
