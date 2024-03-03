@@ -1,6 +1,6 @@
 class RecipeFinder
   def initialize(params)
-    @ingredients = params[:ingredients].map(&:downcase)
+    @ingredients = params[:ingredients]&.map(&:downcase)
     @cook_time = params[:cook_time]
   end
 

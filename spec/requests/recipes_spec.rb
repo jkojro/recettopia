@@ -21,7 +21,8 @@ RSpec.describe "Api::V1::Recipes", type: :request do
     end
 
     it "responds with list of recipes and it's recipe_ingredients" do
-      get '/api/v1/recipes/search'
+      get '/api/v1/recipes/search', params: { ingredients: ["sugar", "pasta"] }
+
       expect(json_response).to eq(
         [
           {
