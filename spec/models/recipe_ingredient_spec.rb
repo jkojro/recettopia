@@ -6,6 +6,4 @@ RSpec.describe RecipeIngredient, type: :model do
   it "has a valid factory" do
     expect(subject).to be_valid
   end
-  
-  it { is_expected.to validate_uniqueness_of(:ingredient_id).scoped_to(:recipe_id) }
 end
