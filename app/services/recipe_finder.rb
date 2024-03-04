@@ -7,12 +7,12 @@ class RecipeFinder
   RECIPES_LIMIT = 10
 
   def call
-    recipes = Recipe.joins(:ingredients)
-                    .where(ingredients: { name: ingredients })
-                    .group('recipes.id')
-                    .order('COUNT(ingredients.id) DESC, ratings DESC')
+    recipes = Recipe.joins(:ingredients).
+      where(ingredients: { name: ingredients }).
+      group('recipes.id').
+      order('COUNT(ingredients.id) DESC, ratings DESC')
 
-    recipes = recipes.where('cook_time <= ?',cook_time) if cook_time.present?
+    recipes = recipes.where('cook_time <= ?', cook_time) if cook_time.present?
 
     recipes.limit(RECIPES_LIMIT)
   end

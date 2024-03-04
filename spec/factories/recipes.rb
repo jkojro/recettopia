@@ -15,9 +15,9 @@ FactoryBot.define do
       evaluator.ingredients.each do |ingredient|
         create(
           :recipe_ingredient,
-          recipe: recipe,
+          recipe:     recipe,
           ingredient: ingredient,
-          name: "2 Cups of #{ingredient.name}"
+          name:       "2 Cups of #{ingredient.name}"
         )
       end
     end

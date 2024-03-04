@@ -21,9 +21,10 @@ RSpec.describe RecipeFinder, type: :service do
     let!(:recipe3) do
       create(
         :recipe, title: "Recipe3", cook_time: 35, ratings: 4.0,
-        ingredients: [ingredient1, ingredient3, ingredient2])
+        ingredients: [ingredient1, ingredient3, ingredient2]
+      )
     end
-    let(:recipe_params) { { ingredients: ["sugar", "flour", "butter"] } }
+    let(:recipe_params) { { ingredients: %w(sugar flour butter) } }
 
     subject { RecipeFinder.new(recipe_params).call }
 
@@ -45,7 +46,7 @@ RSpec.describe RecipeFinder, type: :service do
     end
 
     context "when cook_time param is given" do
-      let(:recipe_params) { { ingredients: ["sugar", "flour", "butter"], cook_time: 20 } }
+      let(:recipe_params) { { ingredients: %w(sugar flour butter), cook_time: 20 } }
 
       it "is filters only recipes in available cook_time in order from the most suitable" do
         expect(subject).to eq([recipe1, recipe2])
